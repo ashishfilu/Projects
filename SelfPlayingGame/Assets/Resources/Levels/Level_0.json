@@ -1,0 +1,30 @@
+{
+    "Rows": 6,
+    "Columns": 9,
+    "CellSize": 2,
+    "Duration": 10.0,
+    "NoiseDensity": 29,
+    "Seed": 80,
+    "EntityList": [
+        {
+            "RowIndex": 0,
+            "ColumnIndex": 8,
+            "OccupierType": 4
+        },
+        {
+            "RowIndex": 2,
+            "ColumnIndex": 4,
+            "OccupierType": 2
+        },
+        {
+            "RowIndex": 3,
+            "ColumnIndex": 1,
+            "OccupierType": 3
+        },
+        {
+            "RowIndex": 4,
+            "ColumnIndex": 4,
+            "OccupierType": 1
+        }
+    ]
+}

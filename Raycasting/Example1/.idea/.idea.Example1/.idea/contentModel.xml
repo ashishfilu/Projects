@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/Library/Caches/Rider2018.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2018.2/resharper-host/local/Transient/ReSharperHost/v182/SolutionCaches/_Example1.-165698517.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="Resources" t="Include">
+          <e p="Shader" t="Include">
+            <e p="BunnyShader.shader" t="Include" />
+            <e p="MarchingCube.compute" t="Include" />
+            <e p="MarchTables.compute" t="Include" />
+            <e p="Noise.compute" t="Include" />
+            <e p="NoiseDensity.compute" t="Include" />
+            <e p="NormalMap.shader" t="Include" />
+            <e p="PlanarDensity.compute" t="Include" />
+            <e p="Raymarching.compute" t="Include" />
+            <e p="SphereDensity.compute" t="Include" />
+            <e p="Terrain.shader" t="Include" />
+          </e>
+        </e>
+        <e p="Script" t="Include">
+          <e p="AStar.cs" t="Include" />
+          <e p="Bot.cs" t="Include" />
+          <e p="CameraController.cs" t="Include" />
+          <e p="ColorGenerator.cs" t="Include" />
+          <e p="DensityGenerator.cs" t="Include" />
+          <e p="FreeCamera.cs" t="Include" />
+          <e p="GoalBasedVectorField.cs" t="Include" />
+          <e p="Main.cs" t="Include" />
+          <e p="MarchingCube.cs" t="Include" />
+          <e p="MathHelper.cs" t="Include" />
+          <e p="MeshHelper.cs" t="Include" />
+          <e p="NavMesh.cs" t="Include" />
+          <e p="NoiseDensity.cs" t="Include" />
+          <e p="ObjectPool.cs" t="Include" />
+          <e p="Ray.cs" t="Include" />
+          <e p="Raycast.cs" t="Include" />
+          <e p="Raymarch.cs" t="Include" />
+          <e p="Section.cs" t="Include" />
+          <e p="Shape.cs" t="Include" />
+          <e p="Singleton.cs" t="Include" />
+          <e p="SphereDensity.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Example1.sln" t="IncludeFlat" />
+      <e p="Library" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
+    </e>
+  </component>
+</project>

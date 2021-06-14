@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+   <particle_data>
+      <data>
+         <type>Spark</type>
+         <path>CartoonFX/CFXPrefabs/Hits/CFX_Hit_A Red</path>
+      </data>
+      <data>
+         <type>Explosion</type>
+         <path>CartoonFX/CFXPrefabs/Explosions/CFX_Explosion</path>
+      </data>
+   </particle_data>
+</root>

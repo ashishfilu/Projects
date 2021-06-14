@@ -1,0 +1,266 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+Texture2D<float4> Source;
+RWTexture2D<float4> Destination;
+
+Texture2D<float4> EarthTexture;
+SamplerState samplerEarthTexture;
+
+float4x4 _CameraToWorld;
+float4x4 _CameraInverseProjection;
+
+struct Ray
+{
+    float3 Position;
+    float3 Direction; 
+};
+
+struct ShapeData
+{
+    float3 Position;
+    float3 Scale;
+    float3 Color;
+    int Type;
+    int Operation;
+};
+
+StructuredBuffer<ShapeData> _buffer;
+int numberOfShapes;
+float4 lightDirection;
+float softShadow;
+
+int shapeType;
+static const float epsilon = 0.001f;
+static const float shadowBias = epsilon * 10.0f;
+static const float maxDistance = 100; 
+
+float SphereDistance(float3 eye, float3 centre, float radius) 
+{
+    return distance(eye, centre) - radius;
+}
+
+float CubeDistance(float3 eye, float3 centre, float3 size) 
+{
+    float3 o = abs(eye-centre) -size;
+    float ud = length(max(o,0));
+    float n = max(max(min(o.x,0),min(o.y,0)), min(o.z,0));
+    return ud+n;
+}
+
+Ray CreateRay( float3 position , float3 direction )
+{
+    Ray ray;
+    ray.Position = position;
+    ray.Direction = direction;
+    return ray;
+}
+
+Ray CreateCameraRay(float2 uv)
+{
+    float3 position = mul(_CameraToWorld,float4(0,0,0,1)).xyz;
+    float3 direction = mul(_CameraInverseProjection,float4(uv,0,1)).xyz;
+    direction = mul(_CameraToWorld,float4(direction,0)).xyz;
+    direction = normalize(direction);
+    return CreateRay(position,direction);
+}
+
+float4 Combine( float dist1 , float dist2 , float3 color1 , float color2 )
+{
+    float3 color = color1;
+    float dist = dist1;
+    
+    if( dist2 < dist1 )
+    {
+        color = color2;
+        dist = dist2;
+    }
+    
+    return float4(color,dist);
+}
+
+float GetSignedDistance( float3 eye , ShapeData  shape )
+{
+    if( shape.Type == 0 )
+    {
+        return CubeDistance( eye , shape.Position , shape.Scale );
+    }
+    else if( shape.Type == 1 )
+    {
+        return SphereDistance( eye , shape.Position , shape.Scale.x );
+    }
+    return maxDistance;
+}
+
+float4 SceneInfo( float3 eye )
+{
+    float distance = maxDistance;
+    float3 color = float3(1,1,1);
+    shapeType = -1;
+    for( int i = 0 ; i < numberOfShapes ; i++ )
+    {
+        ShapeData shape = _buffer[i];
+        float tempDistance = GetSignedDistance( eye , shape );
+        if( tempDistance < distance )
+        {
+            distance = tempDistance;
+            color = shape.Color;
+            shapeType = shape.Type;
+        }
+    }
+    return float4(color,distance);
+}
+
+float3 CalculateNormal(float3 pointOnSurface)
+{
+    float x =  SceneInfo( pointOnSurface + float3(epsilon,0,0)).w-SceneInfo( pointOnSurface + float3(-epsilon,0,0)).w;
+    float y =  SceneInfo( pointOnSurface + float3(0,epsilon,0)).w-SceneInfo( pointOnSurface + float3(0,-epsilon,0)).w;
+    float z =  SceneInfo( pointOnSurface + float3(0,0,epsilon)).w-SceneInfo( pointOnSurface + float3(0,0,-epsilon)).w;
+    return normalize(float3(x,y,z));
+}
+
+float2 CalculateSphereUV( float3 normal )
+{
+    float2 uv ;
+    uv.x = 0.5f + (atan2(-normal.z,-normal.x)/6.282);
+    uv.y = 0.5f - asin(-normal.y) / 3.141;
+    return uv;
+}
+
+float4 CombineShape( float3 color1 , float dist1 , float3 color2 ,float dist2 ,
+                        int operation , float blendWeight )
+{
+    float4 output = float4(color1,dist1);
+    
+    //Intersect operation
+    if( operation == 0 )
+    {
+        if( dist2 > dist1 )
+        {
+            output.xyz = color2;
+            output.w = dist2;
+        }
+    }
+    //Union operation
+    if( operation == 0 )
+    {
+        if( dist2 < dist1 )
+        {
+            output.xyz = color2;
+            output.w = dist2;
+        }
+    }
+    //Difference operation
+    if( operation == 0 )
+    {
+        if( -dist2 > dist1 )
+        {
+            output.xyz = color2;
+            output.w = dist2;
+        }
+    }
+    //Blend Operation
+    
+    return output;
+}
+
+float CalculateHardShadow( Ray ray , float distance )
+{
+    float rayDist = 0;
+    int marchStep = 0;
+    float shadowIntensity = .2;
+    float brightness = 1;
+    
+    while( rayDist < distance )
+    {
+        marchStep++;
+        float4 sceneInfo = SceneInfo( ray.Position );
+        float dst = sceneInfo.w;
+        if( dst < epsilon )
+        {
+            return shadowIntensity;
+        }
+        ray.Position += ray.Direction * dst;
+        rayDist += dst;
+    }
+    return brightness;
+}
+
+//softness will increase the penumbra angle
+float CalculateSoftShadow( Ray ray , float distance , float softness )
+{
+    float rayDist = 0;
+    int marchStep = 0;
+    float shadowIntensity = .2;
+    float brightness = 1;
+    
+    while( rayDist < distance )
+    {
+        marchStep++;
+        float4 sceneInfo = SceneInfo( ray.Position );
+        float dst = sceneInfo.w;
+        brightness = min( brightness, 0.5+1.5*dst/(softness*rayDist) );//Higher multiplier produces crisp shadow
+        if( dst < epsilon )
+        {
+            break;
+        }
+        ray.Position += ray.Direction * dst;
+        rayDist += dst;
+    }
+    brightness = max(brightness,0.0);
+    return brightness*brightness*(3.0-2.0*brightness); // smoothstep
+}
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    float width , height ;
+    Destination.GetDimensions( width , height );
+    Destination[id.xy] = Source[id.xy];
+    
+    float2 uv = id.xy / float2(width,height) * 2.0f - 1.0f;
+    Ray ray = CreateCameraRay(uv);
+    
+    float rayDist = 0;
+    int marchStep = 0;
+    
+    while( rayDist < maxDistance )
+    {
+        marchStep++;
+        float4 sceneInfo = SceneInfo( ray.Position );
+        float dst = sceneInfo.w;
+        if( dst < epsilon )
+        {
+            float3 pointOnSurface = ray.Position + ray.Direction * dst;
+            float3 color = sceneInfo.xyz;
+            float3 normal = CalculateNormal(pointOnSurface - ray.Direction * epsilon);
+            float light = saturate(dot(normal,-lightDirection.xyz));
+            
+            if( shapeType == 1 )
+            {
+                float2 uv = CalculateSphereUV(normal);
+                color = EarthTexture.SampleLevel(samplerEarthTexture,uv,0);
+            }
+            
+            ray.Position = pointOnSurface + normal * shadowBias;
+            ray.Direction = -lightDirection.xyz;
+
+            float shadow = 1.0f;
+            if( softShadow == 1.0f )
+            {
+                shadow = CalculateSoftShadow( ray , maxDistance , 0.2f );
+            }
+            else
+            {
+                shadow = CalculateHardShadow( ray , maxDistance );
+            }
+            
+            Destination[id.xy] = float4(color*light*shadow,1.0f);
+            break;
+        }
+        ray.Position += ray.Direction * dst;
+        rayDist += dst;
+    }
+}

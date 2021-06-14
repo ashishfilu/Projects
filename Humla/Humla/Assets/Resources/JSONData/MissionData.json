@@ -1,0 +1,30 @@
+{
+   "Missions":
+   [
+      {
+        "Path": "Scenes/Level1",
+        "AmbientColor":"255,255,255",
+        "Duration":60
+      },
+      {
+        "Path": "Scenes/Level2",
+        "AmbientColor":"243,0,146",
+        "Duration":60
+      },
+      {
+        "Path": "Scenes/Level3",
+        "AmbientColor":"243,108,0",
+        "Duration":60
+      },
+      {
+        "Path": "Scenes/Level4",
+        "AmbientColor":"255,23,195",
+        "Duration":60
+      },
+      {
+        "Path": "Scenes/Level5",
+        "AmbientColor":"120,115,130",
+        "Duration":60
+      }
+   ]
+}

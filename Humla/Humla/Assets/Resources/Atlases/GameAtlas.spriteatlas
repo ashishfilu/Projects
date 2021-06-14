@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GameAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 1024
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: e17cccf5cba148745b20a1699549242d, type: 3}
+    - {fileID: 2800000, guid: e72bd01f148c37e4fba94cf78b0adf73, type: 3}
+    - {fileID: 2800000, guid: b4f9bd70052b10c4dab0e922e950bc6c, type: 3}
+    - {fileID: 2800000, guid: e9269539b78b89f48ba12b3f65dbc8a9, type: 3}
+    - {fileID: 2800000, guid: 3cb5de452ede301418cc51307f82eec8, type: 3}
+    - {fileID: 2800000, guid: 0dba3ea2ece33cf479421bba77b50e43, type: 3}
+    - {fileID: 2800000, guid: 0241536a6b6919946b3ddea6620f82ce, type: 3}
+    - {fileID: 2800000, guid: dadacc2a327d5b348ae2aaca57f15a6a, type: 3}
+    - {fileID: 2800000, guid: 7de2c33b7589e0b409951d27a75c6547, type: 3}
+    - {fileID: 2800000, guid: 6a4e0f06ac63bc744929a21d5ae77c8a, type: 3}
+    totalSpriteSurfaceArea: 726361
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: b4f9bd70052b10c4dab0e922e950bc6c, type: 3}
+  - {fileID: 21300000, guid: 0dba3ea2ece33cf479421bba77b50e43, type: 3}
+  - {fileID: 21300000, guid: 3cb5de452ede301418cc51307f82eec8, type: 3}
+  - {fileID: 21300000, guid: e17cccf5cba148745b20a1699549242d, type: 3}
+  - {fileID: 21300000, guid: 6a4e0f06ac63bc744929a21d5ae77c8a, type: 3}
+  - {fileID: 21300000, guid: e9269539b78b89f48ba12b3f65dbc8a9, type: 3}
+  - {fileID: 21300000, guid: dadacc2a327d5b348ae2aaca57f15a6a, type: 3}
+  - {fileID: 21300000, guid: 0241536a6b6919946b3ddea6620f82ce, type: 3}
+  - {fileID: 21300000, guid: 7de2c33b7589e0b409951d27a75c6547, type: 3}
+  - {fileID: 21300000, guid: e72bd01f148c37e4fba94cf78b0adf73, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Cloud_2
+  - Tankbase_2
+  - TankBase_1
+  - Blades
+  - Terrain
+  - Helicopter
+  - TankWheel
+  - TankMuzzle
+  - Bg
+  - Cloud_1
+  m_Tag: GameAtlas
+  m_IsVariant: 0
